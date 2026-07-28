@@ -92,6 +92,7 @@ export default function HomeAssistantWidget({ config, onVisibilityChange }: { co
       colorTarget: e?.colorTarget,
       showIfEntity: e?.showIfEntity,
       showIfState: e?.showIfState,
+      stateLabels: e?.stateLabels,
       tapAction: e?.tapAction,
       tapActionEntity: e?.tapActionEntity,
     }))
