@@ -173,6 +173,19 @@ export default function HomeAssistantInspector({
 
             <div>
               <label className="text-[10px] font-medium text-[var(--mf-fg)]/50 block mb-1 uppercase tracking-wider">
+                {t("Status-Text ersetzen")}
+              </label>
+              <input
+                type="text"
+                value={entity.stateLabels || ""}
+                placeholder={t("z.B. not_home:Away;work:Büro")}
+                onChange={(e) => updateEntity(idx, "stateLabels", e.target.value)}
+                className="w-full bg-[var(--mf-ovl)]/50 light:bg-[var(--mf-surface)] border border-[var(--mf-bdr)]/10 text-[var(--mf-fg)]/80 font-sans text-xs rounded-md p-2 focus:outline-none focus:border-cyan-500"
+              />
+            </div>
+
+            <div>
+              <label className="text-[10px] font-medium text-[var(--mf-fg)]/50 block mb-1 uppercase tracking-wider">
                 {t("Farbe")}
               </label>
               <div className="flex items-center gap-2">

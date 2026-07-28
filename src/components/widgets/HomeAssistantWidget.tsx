@@ -9,6 +9,17 @@ import { useGlassStyle } from "@/lib/ui/glass";
 import { useHaLiveStates } from "@/lib/ha/useHaLiveStates";
 import { useT } from "@/lib/i18n/LocaleProvider";
 
+function resolveStateLabel(rawState: string, mapping?: string): string {
+  if (!mapping) return rawState;
+  const lower = rawState.toLowerCase();
+  for (const pair of mapping.split(";")) {
+    const i = pair.indexOf(":");
+    if (i < 0) continue;
+    if (pair.slice(0, i).trim().toLowerCase() === lower) return pair.slice(i + 1).trim();
+  }
+  return rawState;
+}
+
 const ACTIVE_STATES = [
   "on",
   "playing",
@@ -406,7 +417,7 @@ export default function HomeAssistantWidget({ config, onVisibilityChange }: { co
                        {domain === 'timer' ? (
                           <TimerCountdown finishesAt={finishesAt} baseState={stateVal} />
                        ) : (
-                          <span>{stateVal}</span>
+                          <span>{resolveStateLabel(stateVal, slot.stateLabels)}</span>
                        )}
                        {unit && <span>{unit}</span>}
                    </span>
@@ -441,7 +452,7 @@ export default function HomeAssistantWidget({ config, onVisibilityChange }: { co
                        {domain === 'timer' ? (
                           <TimerCountdown finishesAt={finishesAt} baseState={stateVal} />
                        ) : (
-                          <span style={{ fontSize: '0.7em' }}>{stateVal}</span>
+                          <span style={{ fontSize: '0.7em' }}>{resolveStateLabel(stateVal, slot.stateLabels)}</span>
                        )}
                        {unit && !['timer'].includes(domain) && <span style={{ fontSize: '0.6em' }}>{unit}</span>}
                     </div>
