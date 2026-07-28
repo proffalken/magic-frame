@@ -1,4 +1,5 @@
 # --- App Storage ---
+{{- if not .Values.storage.dynamic }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -18,6 +19,7 @@ spec:
     path: {{ .Values.storage.hostPathBase }}/magic-frame-configs-pv
     type: DirectoryOrCreate
 ---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -31,6 +33,7 @@ spec:
     requests:
       storage: {{ .Values.storage.capacity }}
 ---
+{{- if not .Values.storage.dynamic }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -50,6 +53,7 @@ spec:
     path: {{ .Values.storage.hostPathBase }}/magic-frame-wallpapers-pv
     type: DirectoryOrCreate
 ---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -63,8 +67,10 @@ spec:
     requests:
       storage: {{ .Values.storage.capacity }}
 
-# --- Database Storage ---
+# --- Database Storage (Conditional: only when bundled Postgres is enabled) ---
+{{- if .Values.postgres.enabled }}
 ---
+{{- if not .Values.storage.dynamic }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -84,6 +90,7 @@ spec:
     path: {{ .Values.storage.hostPathBase }}/magic-frame-pgdata-pv
     type: DirectoryOrCreate
 ---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -96,10 +103,12 @@ spec:
   resources:
     requests:
       storage: {{ .Values.storage.capacity }}
+{{- end }}
 
 # --- Caddy Storage (Conditional) ---
 {{- if .Values.caddy.enabled }}
 ---
+{{- if not .Values.storage.dynamic }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -119,6 +128,7 @@ spec:
     path: {{ .Values.storage.hostPathBase }}/magic-frame-caddy-conf-pv
     type: DirectoryOrCreate
 ---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -132,6 +142,7 @@ spec:
     requests:
       storage: {{ .Values.storage.capacity }}
 ---
+{{- if not .Values.storage.dynamic }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -151,6 +162,7 @@ spec:
     path: {{ .Values.storage.hostPathBase }}/magic-frame-caddy-config-pv
     type: DirectoryOrCreate
 ---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -164,6 +176,7 @@ spec:
     requests:
       storage: {{ .Values.storage.capacity }}
 ---
+{{- if not .Values.storage.dynamic }}
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -183,6 +196,7 @@ spec:
     path: {{ .Values.storage.hostPathBase }}/magic-frame-caddy-data-pv
     type: DirectoryOrCreate
 ---
+{{- end }}
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
