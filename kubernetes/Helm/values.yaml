@@ -6,8 +6,18 @@ namespace:
 storage:
   className: "magic-frame-storage"
   capacity: "100Mi"
-  # Base path for hostPath volumes
+  # Base path for hostPath volumes (only used when dynamic: false)
   hostPathBase: "/var/lib/rancher/k3s/storage"
+  # false (default) = chart pre-creates hostPath PersistentVolumes, pinned to
+  # whatever node they're first created on (original single-node/k3s behaviour).
+  # true = only PersistentVolumeClaims are rendered; set storage.className to a
+  # real dynamic StorageClass (e.g. "local-path") and let the provisioner handle it.
+  dynamic: false
+
+# Bundled Postgres. Disable when pointing appConfig.dbHost/existingSecrets at
+# an externally-managed database instead (e.g. CloudNativePG).
+postgres:
+  enabled: true
 
 # Application Image Settings
 image:
@@ -47,6 +57,25 @@ appConfig:
   sessionSecret: "YOUR_SESSION_SECRET_HERE" # ########################### CHANGE THIS!
   dbPassword: "YOUR_SECURE_PASSWORD_HERE" # ############################# CHANGE THIS!
 
+  # Names of pre-existing Kubernetes Secrets to load into the app container
+  # (envFrom, applied after the chart's own ConfigMap/Secret above, so keys
+  # here win on conflict). Use this instead of putting real secrets in
+  # values.yaml — e.g. a Secret synced from an external DB, or one created
+  # by hand with `kubectl create secret`.
+  existingSecrets: []
+
 # Toggle Caddy deployment and related configs on or off
 caddy:
   enabled: "CHOOSE_true_OR_false" # ###################################### CHANGE THIS!
+
+# Standard Ingress (alternative to the bundled Caddy above). Set caddy.enabled
+# to false when using this.
+ingress:
+  enabled: false
+  className: "traefik"
+  host: ""
+  tls:
+    enabled: true
+    clusterIssuer: "letsencrypt-prod"
+    # Defaults to "<host-with-dots-as-dashes>-tls" if left empty.
+    secretName: ""

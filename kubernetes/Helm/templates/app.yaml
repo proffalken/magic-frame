@@ -31,6 +31,10 @@ spec:
                 name: magic-frame-env
             - secretRef:
                 name: magic-frame-secrets
+            {{- range .Values.appConfig.existingSecrets }}
+            - secretRef:
+                name: {{ . }}
+            {{- end }}
           ports:
             - containerPort: 3000
               protocol: TCP
@@ -74,7 +78,7 @@ spec:
   selector:
     app: magic-frame-app
 
-{{- if not .Values.caddy.enabled }}
+{{- if and (not .Values.caddy.enabled) (not .Values.ingress.enabled) }}
 ---
 apiVersion: v1
 kind: Service
