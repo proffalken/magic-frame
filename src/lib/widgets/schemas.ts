@@ -113,6 +113,8 @@ const haEntitySlot = z.object({
   colorTarget: z.string().optional(),
   showIfEntity: z.string().optional(),
   showIfState: z.string().optional(),
+  // Status-Text ersetzen, z.B. "not_home:Away;work:Büro" (Format: state:label;state:label)
+  stateLabels: z.string().optional(),
 });
 
 const homeAssistantConfig = baseConfig
