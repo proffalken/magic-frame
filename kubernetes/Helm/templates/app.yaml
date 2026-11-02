@@ -38,6 +38,10 @@ spec:
           ports:
             - containerPort: 3000
               protocol: TCP
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - mountPath: /app/configs
               name: magic-frame-configs-pvc
