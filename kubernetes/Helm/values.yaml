@@ -25,6 +25,15 @@ image:
   tag: latest
   pullPolicy: Always
 
+# CPU/memory requests and limits for the app container. Empty = none set.
+# e.g.
+# resources:
+#   requests:
+#     memory: 192Mi
+#   limits:
+#     memory: 384Mi
+resources: {}
+
 # nodePort Settings (external access). Change to your needs!
 nodePorts:
   httpPort: 30080
